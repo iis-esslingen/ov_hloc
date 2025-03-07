@@ -1,13 +1,23 @@
 #include "keyframe.h"
 
+
 template <typename Derived>
-static void reduceVector(vector<Derived> &v, vector<uchar> status)
+static void reduceVector(vector<Derived> &v, const vector<uchar> &status)
 {
+    if (v.empty() || status.empty()) return; // Handle empty vectors safely
+
+    int n = std::min(v.size(), status.size()); // Ensure safe access
     int j = 0;
-    for (int i = 0; i < int(v.size()); i++)
+
+    for (int i = 0; i < n; i++)
+    {
         if (status[i])
-            v[j++] = v[i];
-    v.resize(j);
+        {
+            v[j++] = v[i]; // Move valid elements to the front
+        }
+    }
+    
+    v.resize(j); // Resize to keep only the valid elements
 }
 
 KeyFrame::KeyFrame(double _time_stamp, int _index, Vector3d &_vio_T_w_i, Matrix3d &_vio_R_w_i, cv::Mat &_image,

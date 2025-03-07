@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(CUDA)
 
 # set your own libtorch path
-set(TORCH_PATH /your/path/to/libtorch/share/cmake/Torch)
+set(TORCH_PATH /workspace/libtorch/share/cmake/Torch)
 if (TORCH_PATH)
     message("TORCH_PATH set to: ${TORCH_PATH}")
     set(Torch_DIR ${TORCH_PATH})
@@ -48,3 +48,8 @@ add_executable(loop_hloc_node
     )
 
 target_link_libraries(loop_hloc_node ${catkin_LIBRARIES}  ${OpenCV_LIBS} ${CERES_LIBRARIES} ${CUDA_LIBRARIES} ${TORCH_LIBRARIES}) 
+
+catkin_install_python(PROGRAMS
+    scripts/save_trajectory_node.py
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
